@@ -6,7 +6,7 @@ namespace TechStoreAPI.Interfaces
 {
     public interface ITechRepository
     {
-        Task<List<Product>> GetAllProductsAsync(QueryObjects queryObj); //string? brand, string? category, string? sort
+        Task<Pagination<Product>> GetAllProductsAsync(QueryObjects queryObj); //string? brand, string? category, string? sort
 
         Task<IReadOnlyList<string>> GetByBrandsAsync();
 
@@ -19,6 +19,8 @@ namespace TechStoreAPI.Interfaces
         Task<Product?> UpdateProductAsync(int id, ProductDto productDto);
 
         Task <Product?> DeleteProductAsync(int id);
+
+
 
     }
 }

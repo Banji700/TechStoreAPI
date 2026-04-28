@@ -11,12 +11,12 @@ namespace TechStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
         private readonly ITechRepository _techRepository;
 
-        public ProductController(ApplicationDBContext context, ITechRepository techRepository )
+        public ProductsController(ApplicationDBContext context, ITechRepository techRepository )
         {
             _context = context;
             _techRepository = techRepository;

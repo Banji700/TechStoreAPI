@@ -37,17 +37,25 @@ namespace TechStoreAPI.Repositories
 
         }
 
-        public async Task<List<Product>> GetAllProductsAsync(QueryObjects queryObj)
+        public async Task<Pagination<Product>> GetAllProductsAsync(QueryObjects queryObj)
         {
            var query = _context.Products.AsQueryable();
            if (!string.IsNullOrWhiteSpace(queryObj.Brand))
            {
-               query = query.Where(b => b.Brand == queryObj.Brand);
-           }
+                var brands = queryObj.Brand.Split(',');
+                query = query.Where(b => brands.Contains(b.Brand));
+               // query = query.Where(b => b.Brand == queryObj.Brand);
+            }
            if (!string.IsNullOrEmpty(queryObj.Category))
            {
-               query = query.Where(x => x.Category == queryObj.Category);
-           }
+                var categories = queryObj.Category.Split(',');
+                query = query.Where(x => categories.Contains(x.Category));
+                //query = query.Where(x => x.Category == queryObj.Category);
+            }
+           if(!string.IsNullOrWhiteSpace(queryObj.Search))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(queryObj.Search));
+            }
            //
            query = queryObj.Sort switch
            {
@@ -57,9 +65,11 @@ namespace TechStoreAPI.Repositories
            };
 
             var skipNum = (queryObj.PageNum -1) * queryObj.PageSize;
+
+            var count = await query.CountAsync();
             
-            var allproducts = query.Skip(skipNum).Take(queryObj.PageSize).ToListAsync();
-            return await allproducts;
+            var allproducts = await query.Skip(skipNum).Take(queryObj.PageSize).ToListAsync();
+            return new Pagination<Product>(queryObj.PageNum, queryObj.PageSize, count, allproducts);//await allproducts;
         }
 
         public async Task<IReadOnlyList<string>> GetByBrandsAsync()

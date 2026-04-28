@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechStoreAPI.Models;
+using TechStoreAPI.ShoppingCartFunc;
 
 namespace TechStoreAPI.Data
 {
@@ -11,5 +12,7 @@ namespace TechStoreAPI.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ShoppingCart>ShoppingCarts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
     }
 }
