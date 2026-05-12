@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechStoreAPI.Data;
 
@@ -11,9 +12,11 @@ using TechStoreAPI.Data;
 namespace TechStoreAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260509124636_orderaggregate")]
+    partial class orderaggregate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,17 +384,17 @@ namespace TechStoreAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductsOrderedId")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("productsOrderedId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductsOrderedId");
+                    b.HasIndex("productsOrderedId");
 
                     b.ToTable("OrderItems");
                 });
@@ -411,10 +414,10 @@ namespace TechStoreAPI.Migrations
                     b.Property<int>("ExpMonth")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExpYear")
+                    b.Property<int>("Last4")
                         .HasColumnType("int");
 
-                    b.Property<int>("Last4")
+                    b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -467,10 +470,6 @@ namespace TechStoreAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Line2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostalCode")
@@ -676,13 +675,13 @@ namespace TechStoreAPI.Migrations
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("TechStoreAPI.OrderAggregate.ProductsOrdered", "ProductsOrdered")
+                    b.HasOne("TechStoreAPI.OrderAggregate.ProductsOrdered", "productsOrdered")
                         .WithMany()
-                        .HasForeignKey("ProductsOrderedId")
+                        .HasForeignKey("productsOrderedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductsOrdered");
+                    b.Navigation("productsOrdered");
                 });
 
             modelBuilder.Entity("TechStoreAPI.ShoppingCartFunc.CartItem", b =>

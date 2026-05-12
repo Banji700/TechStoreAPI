@@ -8,5 +8,11 @@ namespace TechStoreAPI.ShoppingCartFunc
         public string BuyerId { get; set; } = string.Empty;
 
         public List<CartItem> Items { get; set; } = [];
+
+        public int? DeliveryMethodId { get; set; }
+
+        public string? ClientSecret {  get; set; }
+
+        public string? PaymentIntentId { get; set; }
     }
 }

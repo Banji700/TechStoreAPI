@@ -50,6 +50,12 @@ namespace TechStoreAPI.ShoppingCartFunc
             }
             else
             {
+                 var itemsToRemove = existingCart.Items
+                .Where(existingItem => !cart.Items.Any(newItem => newItem.ProductId == existingItem.ProductId))
+                .ToList();
+
+                _dbContext.CartItems.RemoveRange(itemsToRemove);
+
                 foreach (var item in cart.Items)
                 {
                     var existingItem = existingCart.Items
@@ -64,7 +70,11 @@ namespace TechStoreAPI.ShoppingCartFunc
                         existingCart.Items.Add(item);
                     }
                 }
+                existingCart.DeliveryMethodId = cart.DeliveryMethodId;
+                existingCart.PaymentIntentId = cart.PaymentIntentId;
+                existingCart.ClientSecret = cart.ClientSecret;
             }
+            
 
             await _dbContext.SaveChangesAsync();
 

@@ -4,7 +4,8 @@ using TechStoreAPI.ShoppingCartFunc;
 
 namespace TechStoreAPI.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/shoppingcart")]
     [ApiController]
     public class ShoppingCartController : ControllerBase
     {
@@ -16,12 +17,14 @@ namespace TechStoreAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ShoppingCart>> GetCart()
+        public async Task<ActionResult<ShoppingCart>?> GetCart()
         {
             var buyerId = Request.Cookies["buyerId"];
             if(string.IsNullOrEmpty(buyerId) )
             {
-                return NotFound();
+                return null;
+                //return BadRequest("buyerId cookie missing");
+                //return NotFound();
             }
 
             var cart = await _cartService.GetCartAsync(buyerId);
@@ -43,7 +46,7 @@ namespace TechStoreAPI.Controllers
                 Response.Cookies.Append("buyerId", buyerId, new CookieOptions
                 {
                     IsEssential = true,
-                    Expires = DateTime.Now.AddDays(30),
+                    Expires = DateTime.UtcNow.AddDays(30),
                     SameSite = SameSiteMode.None,
                     Secure = true
                 });
