@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ using TechStoreAPI.Repositories;
 using TechStoreAPI.Services;
 using TechStoreAPI.ShoppingCartFunc;
 using TechStoreAPI.SignalR;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -133,7 +135,16 @@ builder.Services.AddCors(options =>{options.AddPolicy("CorsPolicy", policy =>{po
             .AllowCredentials();
     });
 });
+
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+
+var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+
+await context.Database.MigrateAsync();
+
+await ContextSeed.SeedAsync(context);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -143,6 +154,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("CorsPolicy");
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
@@ -150,6 +163,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
 
 app.MapHub<NotificationHub>("/hub/notifications");
 

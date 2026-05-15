@@ -1,0 +1,182 @@
+﻿[
+  {
+    "Name": "iPhone 15 Pro",
+    "Brand": "Apple",
+    "Category": "Phone",
+    "Price": 1199.99,
+    "Description": "Latest Apple smartphone with A17 chip, titanium design, and advanced camera system.",
+    "ImageUrl": "ProductImages/Iphone15pro.png",
+    "QuantityItems": 25
+  },
+  {
+    "Name": "Galaxy S24 Ultra",
+    "Brand": "Samsung",
+    "Category": "Phone",
+    "Price": 1099.99,
+    "Description": "High-end Android phone with S Pen, powerful performance, and 200MP camera.",
+    "ImageUrl": "ProductImages/Galaxys24Ultra.png",
+    "QuantityItems": 30
+  },
+  {
+    "Name": "MacBook Air M3",
+    "Brand": "Apple",
+    "Category": "Laptop",
+    "Price": 1299.99,
+    "Description": "Lightweight laptop with Apple M3 chip, Retina display, and long battery life.",
+    "ImageUrl": "ProductImages/MacBookAirM3.png",
+    "QuantityItems": 15
+  },
+  {
+    "Name": "Dell XPS 15",
+    "Brand": "Dell",
+    "Category": "Laptop",
+    "Price": 1499.99,
+    "Description": "Premium laptop with InfinityEdge display and powerful Intel processor.",
+    "ImageUrl": "ProductImages/DellXPS15.png",
+    "QuantityItems": 10
+  },
+  {
+    "Name": "Sony WH-1000XM5",
+    "Brand": "Sony",
+    "Category": "Headphone",
+    "Price": 399.99,
+    "Description": "Industry-leading noise canceling wireless headphones with premium sound.",
+    "ImageUrl": "ProductImages/SonyWH1000XM5.png",
+    "QuantityItems": 40
+  },
+  {
+    "Name": "AirPods Pro (2nd Gen)",
+    "Brand": "Apple",
+    "Category": "Earbud",
+    "Price": 249.99,
+    "Description": "Wireless earbuds with active noise cancellation and spatial audio.",
+    "ImageUrl": "ProductImages/Airpodpro.png",
+    "QuantityItems": 50
+  },
+  {
+    "Name": "iPad Pro 12.9",
+    "Brand": "Apple",
+    "Category": "Tablet",
+    "Price": 1099.99,
+    "Description": "Powerful tablet with M2 chip, Liquid Retina display, and Apple Pencil support.",
+    "ImageUrl": "ProductImages/Ipadpro129.png",
+    "QuantityItems": 20
+  },
+  {
+    "Name": "Samsung Galaxy Tab S9",
+    "Brand": "Samsung",
+    "Category": "Tablet",
+    "Price": 799.99,
+    "Description": "High-performance Android tablet with AMOLED display and S Pen.",
+    "ImageUrl": "ProductImages/samsungtabs9.png",
+    "QuantityItems": 18
+  },
+  {
+    "Name": "Logitech MX Master 3S",
+    "Brand": "Logitech",
+    "Category": "Accessory",
+    "Price": 99.99,
+    "Description": "Advanced wireless mouse designed for productivity and precision.",
+    "ImageUrl": "ProductImages/logitechmxmaster.png",
+    "QuantityItems": 60
+  },
+  {
+    "Name": "Razer BlackWidow V4",
+    "Brand": "Razer",
+    "Category": "Keyboard",
+    "Price": 179.99,
+    "Description": "Mechanical gaming keyboard with RGB lighting and tactile switches.",
+    "ImageUrl": "ProductImages/razerblackwidow.png",
+    "QuantityItems": 35
+  },
+  {
+    "Name": "LG UltraGear 27\" Monitor",
+    "Brand": "LG",
+    "Category": "Monitor",
+    "Price": 449.99,
+    "Description": "27-inch QHD gaming monitor with high refresh rate and low response time.",
+    "ImageUrl": "ProductImages/Lgultragear.jpg",
+    "QuantityItems": 22
+  },
+  {
+    "Name": "PlayStation 5",
+    "Brand": "Sony",
+    "Category": "Gaming Console",
+    "Price": 499.99,
+    "Description": "Next-gen gaming console with ultra-fast SSD and immersive gameplay.",
+    "ImageUrl": "ProductImages/playstation5.png",
+    "QuantityItems": 12
+  },
+  {
+    "Name": "Xbox Series X",
+    "Brand": "Microsoft",
+    "Category": "Gaming Console",
+    "Price": 499.99,
+    "Description": "Powerful gaming console with 4K gaming and high performance.",
+    "ImageUrl": "ProductImages/xboxseriesx.png",
+    "QuantityItems": 14
+  },
+  {
+    "Name": "GoPro Hero 12",
+    "Brand": "GoPro",
+    "Category": "Camera",
+    "Price": 399.99,
+    "Description": "Action camera with 5.3K video recording and rugged waterproof design.",
+    "ImageUrl": "ProductImages/goprohero12.webp",
+    "QuantityItems": 28
+  },
+  {
+    "Name": "Anker PowerCore 20000",
+    "Brand": "Anker",
+    "Category": "Accessory",
+    "Price": 59.99,
+    "Description": "High-capacity portable charger with fast charging technology.",
+    "ImageUrl": "ProductImages/ankerpowercore.jpg",
+    "QuantityItems": 75
+  },
+  {
+    "Name": "Asus ROG Strix G16",
+    "Brand": "Asus",
+    "Category": "Laptop",
+    "Price": 1399.99,
+    "Description": "High-performance gaming laptop with Intel i7 processor and RTX 4060 graphics.",
+    "ImageUrl": "ProductImages/asusrogstrixg16.jpg",
+    "QuantityItems": 8
+  },
+  {
+    "Name": "Canon EOS R50",
+    "Brand": "Canon",
+    "Category": "Camera",
+    "Price": 679.99,
+    "Description": "Compact mirrorless camera with 4K video and excellent autofocus.",
+    "ImageUrl": "ProductImages/canoneosr50.jpg",
+    "QuantityItems": 16
+  },
+  {
+    "Name": "Samsung Odyssey G5 32\"",
+    "Brand": "Samsung",
+    "Category": "Monitor",
+    "Price": 329.99,
+    "Description": "Curved gaming monitor with 144Hz refresh rate and QHD resolution.",
+    "ImageUrl": "ProductImages/samsungodg5.webp",
+    "QuantityItems": 20
+  },
+  {
+    "Name": "HyperX Cloud II",
+    "Brand": "HyperX",
+    "Category": "Headphone",
+    "Price": 99.99,
+    "Description": "Comfortable gaming headset with virtual 7.1 surround sound.",
+    "ImageUrl": "ProductImages/hyperxcloud2.webp",
+    "QuantityItems": 45
+  },
+  {
+    "Name": "SanDisk Extreme 1TB SSD",
+    "Brand": "SanDisk",
+    "Category": "Accessory",
+    "Price": 129.99,
+    "Description": "Portable high-speed SSD with USB-C connectivity and rugged design.",
+    "ImageUrl": "ProductImages/sandisk.webp",
+    "QuantityItems": 32
+  }
+]
