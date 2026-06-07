@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using TechStoreAPI.Data;
 using TechStoreAPI.Interfaces;
 using TechStoreAPI.OrderFunction;
@@ -13,16 +15,19 @@ namespace TechStoreAPI.Services
         private readonly IConfiguration _config;
         private readonly ICartService _cartService;
         private readonly ApplicationDBContext _dbcontext;
+        private readonly ICouponService _couponService;
 
-        public PaymentService(ICartService cartService, IConfiguration config, ApplicationDBContext dBContext)
+        public PaymentService(ICartService cartService, IConfiguration config, ApplicationDBContext dBContext, ICouponService couponService)
         {
+            _couponService = couponService;
             _config = config;
             _cartService = cartService;
             _dbcontext = dBContext;
+            StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
         }
         public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
         {
-            StripeConfiguration.ApiKey = _config["StripeSettings:SecretKey"];
+            
 
             var cart = await _cartService.GetCartAsync(cartId);
 
@@ -50,10 +55,48 @@ namespace TechStoreAPI.Services
             }
             var service = new PaymentIntentService();
             PaymentIntent? intent = null;
+            decimal discount = 0;
 
             var subtotal = cart.Items.Sum(x => x.QuantityItems * x.Price);
-            var total = subtotal + shippingPrice;
-            var amount = (long)(total * 100);
+
+            if (string.IsNullOrEmpty(cart.CouponCode))
+            {
+                cart.Coupon = null;
+                cart.PaymentIntentId = null;
+                cart.ClientSecret = null;
+            }
+            AppCoupon? coupon = null;
+
+            if (!string.IsNullOrEmpty(cart.CouponCode))
+            {
+                coupon = await _couponService.GetCouponFromPromoCode(cart.CouponCode);
+            }
+            //var coupon = await _couponService.GetCouponFromPromoCode(cart.CouponCode);
+
+            if (coupon != null) { 
+
+                cart.Coupon = coupon;
+          
+                if (coupon.PercentOff != null)
+                {
+                    discount = subtotal * ((decimal)coupon.PercentOff / 100);
+                }
+
+                if (coupon.AmountOff != null)
+                {
+                    discount = (decimal)coupon.AmountOff / 100;
+                }
+
+            }
+            else
+            {
+                cart.Coupon = null;
+            }
+
+            var total = subtotal + shippingPrice - discount;
+            var amount = (long)Math.Round(total * 100);
+
+      
 
             if (string.IsNullOrEmpty(cart.PaymentIntentId))
             {
@@ -103,9 +146,36 @@ namespace TechStoreAPI.Services
                
 
             }
-            await _cartService.SetCartAsync(cart);
 
-            return cart;
+            var updatedCart = await _cartService.SetCartAsync(cart);
+
+            if (updatedCart != null)
+            {
+                updatedCart.Coupon = coupon;
+            }
+
+            return updatedCart;
+            // await _cartService.SetCartAsync(cart);
+            //
+            // cart.Coupon = coupon;
+
+            //  return cart;
         }
+
+       
+        public async Task<string> RefundPayment(string paymentIntentId)
+         {
+            var refundOptions = new RefundCreateOptions
+            {
+                PaymentIntent = paymentIntentId
+            };
+
+            var refundService = new RefundService();
+
+            var result = await refundService.CreateAsync(refundOptions);
+
+            return result.Status;
+             
+         }
     }
 }

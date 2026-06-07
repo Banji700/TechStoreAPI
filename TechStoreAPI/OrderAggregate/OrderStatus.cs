@@ -8,6 +8,8 @@
 
         PaymentFailed,
 
-        PaymentMismatch
+        PaymentMismatch,
+
+        Refunded
     }
 }

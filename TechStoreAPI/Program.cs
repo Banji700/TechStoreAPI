@@ -29,7 +29,8 @@ var builder = WebApplication.CreateBuilder(args);
 //    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
 //});
 builder.Services.AddControllers();
-builder.Services.AddDbContext<ApplicationDBContext>(options => {options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); 
+builder.Services.AddDbContext<ApplicationDBContext>(options => {options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    sqlOptions => sqlOptions.EnableRetryOnFailure()); 
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -63,22 +64,28 @@ builder.Services.AddSwaggerGen(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 
+
 builder.Services.AddScoped<ITechRepository, TechRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITokenService, TokenService>();  
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<OrderingService>();
 builder.Services.AddSignalR();
 builder.Services.AddCors();
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
+    
     options.Password.RequireDigit =true;
     options.Password.RequireLowercase =true;
     options.Password.RequireNonAlphanumeric =true;
     options.Password.RequireUppercase =true;
    // options.Password.RequiredLength = 15;
-}).AddEntityFrameworkStores<ApplicationDBContext>();
+   
+   
+}).AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -141,10 +148,11 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 
 var context = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-await context.Database.MigrateAsync();
+//await context.Database.MigrateAsync();
 
-await ContextSeed.SeedAsync(context);
+await ContextSeed.SeedAsync(context, userManager);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

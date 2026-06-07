@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TechStoreAPI.OrderFunction;
 
 namespace TechStoreAPI.ShoppingCartFunc
 {
@@ -14,5 +15,10 @@ namespace TechStoreAPI.ShoppingCartFunc
         public string? ClientSecret {  get; set; }
 
         public string? PaymentIntentId { get; set; }
+
+        public AppCoupon? Coupon { get; set; }
+
+        public string? CouponCode { get; set; }
+
     }
 }

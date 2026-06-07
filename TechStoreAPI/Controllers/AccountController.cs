@@ -41,6 +41,8 @@ namespace TechStoreAPI.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user,loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized("Username not found or password incorrect");
+            var roles = await _userManager.GetRolesAsync(user);
+
 
             return Ok(
                 new NewUserDto
@@ -49,7 +51,8 @@ namespace TechStoreAPI.Controllers
                     LastName = user.LastName,
                     UserName = user.Email,
                     Email = user.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateToken(user),
+                    Roles = roles.ToList()
                 }
                 );
                 
@@ -74,12 +77,16 @@ namespace TechStoreAPI.Controllers
                 };
 
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
+                
 
-                if(createdUser.Succeeded)
+                if (createdUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-                    if(roleResult.Succeeded)
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, "Customer");
+                    
+                    if (roleResult.Succeeded)
                     {
+                        var roles = await _userManager.GetRolesAsync(appUser);
+
                         return Ok
                             (
                                new NewUserDto
@@ -88,7 +95,8 @@ namespace TechStoreAPI.Controllers
                                    Email = appUser.Email,
                                    FirstName = appUser.FirstName,
                                    LastName = appUser.LastName,
-                                   Token = _tokenService.CreateToken(appUser)
+                                   Token = await _tokenService.CreateToken(appUser),
+                                   Roles = roles.ToList()
                                }
                             );
 
@@ -111,7 +119,6 @@ namespace TechStoreAPI.Controllers
         }
 
         [HttpPost("address")]
-        
        
         public async Task<IActionResult> CreateOrUpdateAddress(AddressDto addressDto)
         {
@@ -158,7 +165,8 @@ namespace TechStoreAPI.Controllers
                 user.FirstName,
                 user.LastName,
                 user.Email,
-                Address = user.Address?.ToDto()
+                Address = user.Address?.ToDto(),
+                Roles = User.FindFirstValue(ClaimTypes.Role)
             });
         }
     }

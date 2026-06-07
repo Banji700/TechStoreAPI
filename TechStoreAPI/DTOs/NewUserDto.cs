@@ -9,5 +9,7 @@
 
         public string Token { get; set; } = string.Empty;
 
+        public IReadOnlyList<string> Roles { get; set; } = [];
+
     }
 }

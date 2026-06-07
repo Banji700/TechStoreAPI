@@ -93,9 +93,14 @@ namespace TechStoreAPI.Controllers
             {
                 var order = await _dbContext.Orders.Include(x => x.OrderItems).Include(x => x.DeliveryMethod).FirstOrDefaultAsync(x => x.PaymentIntentId == intent.Id);
 
+                
+
                 if (order == null) return;
 
-                if((long) (order.Total * 100) != intent.Amount)
+                var orderAmount = (long)Math.Round(order.Total * 100);
+                var stripeAmount = intent.Amount;
+
+                if(Math.Abs(orderAmount - stripeAmount) > 1) //(orderAmount != intent.Amount)// 
                 {
                     order.Status = OrderStatus.PaymentMismatch;
                 }
@@ -103,7 +108,7 @@ namespace TechStoreAPI.Controllers
                 {
                     order.Status = OrderStatus.PaymentReceived;
                 }
-                
+
                 await _dbContext.SaveChangesAsync();
 
                 var connectionId = NotificationHub.GetConnectionIdByEEmail(order.BuyerEmail);
@@ -112,7 +117,7 @@ namespace TechStoreAPI.Controllers
                 {
                     await _hubContext.Clients.Client(connectionId).SendAsync("OrderCompleteNotification", order);
                 }
-
+                
             }
         }
 

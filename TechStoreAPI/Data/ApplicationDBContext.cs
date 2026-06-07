@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TechStoreAPI.ConfigFolder;
 using TechStoreAPI.LoginRegister;
 using TechStoreAPI.Models;
 using TechStoreAPI.OrderAggregate;
@@ -28,25 +29,27 @@ namespace TechStoreAPI.Data
         {
             base.OnModelCreating(builder);
 
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new IdentityRole
-                {
-                    Id = "1",
-                    Name = "Admin",
-                    NormalizedName = "ADMIN",
-                    ConcurrencyStamp = "admin-role-stamp"
-                },
-                new IdentityRole
-                {
-                    Id = "2",
-                    Name = "User",
-                    NormalizedName = "USER",
-                    ConcurrencyStamp = "user-role-stamp"
+            builder.ApplyConfiguration(new RoleConfiguration());
 
-                },
-            };
-            builder.Entity<IdentityRole>().HasData(roles);
+            //List<IdentityRole> roles = new List<IdentityRole>
+            // {
+            //     new IdentityRole
+            //    {
+            //        Id = "1",
+            //        Name = "Admin",
+            //        NormalizedName = "ADMIN",
+            //        ConcurrencyStamp = "admin-role-stamp"
+            //   },
+            //    new IdentityRole
+            //    {
+            //        Id = "2",
+            //        Name = "User",
+            //        NormalizedName = "USER",
+            //         ConcurrencyStamp = "user-role-stamp"
+
+            //    },
+            // };
+            // builder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }

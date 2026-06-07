@@ -1,15 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechStoreAPI.Data;
+using TechStoreAPI.Interfaces;
 
 namespace TechStoreAPI.ShoppingCartFunc
 {
     public class CartService : ICartService
     {
         private readonly ApplicationDBContext _dbContext;
+        private readonly ICouponService _couponService;
 
-        public CartService(ApplicationDBContext dbContext)
+        // private readonly ICouponService _couponService;
+
+
+        public CartService(ApplicationDBContext dbContext, ICouponService couponService)
         {
             _dbContext = dbContext;
+            _couponService = couponService;
         }
 
         public async Task<bool> DeleteCartAsync(string key)
@@ -32,17 +38,27 @@ namespace TechStoreAPI.ShoppingCartFunc
         {
 
 
-            return await _dbContext.ShoppingCarts
-                .Include(x => x.Items)
-                .FirstOrDefaultAsync(x => x.BuyerId == key);
+            var cart = await _dbContext.ShoppingCarts
+            .Include(x => x.Items)
+            .FirstOrDefaultAsync(x => x.BuyerId == key);
+
+            if (cart != null && !string.IsNullOrEmpty(cart.CouponCode))
+            {
+                cart.Coupon = await _couponService.GetCouponFromPromoCode(cart.CouponCode);
+            }
+
+            return cart;
 
         }
 
         public async Task<ShoppingCart?> SetCartAsync(ShoppingCart cart)
         {
+            cart.Coupon = null;
+
             var existingCart = await _dbContext.ShoppingCarts
-            .Include(x => x.Items)
-            .FirstOrDefaultAsync(x => x.BuyerId == cart.BuyerId);
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.BuyerId == cart.BuyerId);
+
 
             if (existingCart == null)
             {
@@ -50,9 +66,9 @@ namespace TechStoreAPI.ShoppingCartFunc
             }
             else
             {
-                 var itemsToRemove = existingCart.Items
-                .Where(existingItem => !cart.Items.Any(newItem => newItem.ProductId == existingItem.ProductId))
-                .ToList();
+                var itemsToRemove = existingCart.Items
+               .Where(existingItem => !cart.Items.Any(newItem => newItem.ProductId == existingItem.ProductId))
+               .ToList();
 
                 _dbContext.CartItems.RemoveRange(itemsToRemove);
 
@@ -73,6 +89,8 @@ namespace TechStoreAPI.ShoppingCartFunc
                 existingCart.DeliveryMethodId = cart.DeliveryMethodId;
                 existingCart.PaymentIntentId = cart.PaymentIntentId;
                 existingCart.ClientSecret = cart.ClientSecret;
+                existingCart.CouponCode = cart.CouponCode;
+
             }
             
 

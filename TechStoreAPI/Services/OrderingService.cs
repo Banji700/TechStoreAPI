@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechStoreAPI.Data;
 using TechStoreAPI.DTOs;
+using TechStoreAPI.Interfaces;
 using TechStoreAPI.LoginRegister;
 using TechStoreAPI.OrderAggregate;
 
@@ -9,9 +10,11 @@ namespace TechStoreAPI.Services
     public class OrderingService
     {
         private readonly ApplicationDBContext _dbContext;
-        public OrderingService(ApplicationDBContext dbContext)
+        private readonly ICouponService _couponService;
+        public OrderingService(ApplicationDBContext dbContext, ICouponService couponService)
         {
             _dbContext = dbContext;
+            _couponService = couponService;
         }
 
         public async Task<Order?> CreateOrderAsync(CreateOrderDto orderDto, string buyerEmail)
@@ -23,6 +26,8 @@ namespace TechStoreAPI.Services
             var deliveryMethod = await _dbContext.DeliveryMethods.FindAsync(orderDto.DeliveryMethodId);
 
             if(deliveryMethod == null) return null;
+
+
 
             var orderItems = cart.Items.Select(item => new OrderItem
             {
@@ -39,10 +44,24 @@ namespace TechStoreAPI.Services
 
            var subtotal = orderItems.Sum(x => x.Price * x.Quantity);
 
+            if (!string.IsNullOrEmpty(cart.CouponCode))
+            {
+                cart.Coupon = await _couponService.GetCouponFromPromoCode(cart.CouponCode);
+            }
+
+            var discount = cart.Coupon != null
+            ? cart.Coupon.PercentOff != null
+            ? subtotal * ((decimal)cart.Coupon.PercentOff / 100)
+            : (decimal)(cart.Coupon.AmountOff ?? 0) / 100
+            : 0;
+
+            var orderCount = await _dbContext.Orders.CountAsync(x => x.BuyerEmail == buyerEmail);
+
             var order = new Order
             {
                 BuyerEmail = buyerEmail,
                 PaymentIntentId = cart.PaymentIntentId!,
+                Discount = discount,
 
                 ShippingAddress = new ShippingAddress
                 {
@@ -58,7 +77,8 @@ namespace TechStoreAPI.Services
                 DeliveryMethod = deliveryMethod,
                 PaymentSummary = orderDto.PaymentSummary,
                 OrderItems = orderItems,
-                Subtotal = subtotal
+                Subtotal = subtotal,
+                OrderNumber = $"{(orderCount + 1):D2}"
 
             };
 

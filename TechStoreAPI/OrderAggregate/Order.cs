@@ -7,6 +7,7 @@ namespace TechStoreAPI.OrderAggregate
     public class Order
     {
         public int Id { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public required string BuyerEmail { get; set; }
         public ShippingAddress ShippingAddress { get; set; } = null!;
@@ -19,8 +20,10 @@ namespace TechStoreAPI.OrderAggregate
 
         [NotMapped]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Total => Subtotal + DeliveryMethod.Price;
+        public decimal Total => Subtotal - Discount + (DeliveryMethod?.Price ?? 0);
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public required string PaymentIntentId { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Discount { get; set; }
     }
 }

@@ -1,0 +1,26 @@
+﻿[
+  {
+    "ShortName": "Economy",
+    "DeliveryTime": "5-7 Days",
+    "Description": "Affordable economy delivery",
+    "Price": 2.99
+  },
+  {
+    "ShortName": "Standard",
+    "DeliveryTime": "3-5 Days",
+    "Description": "Standard delivery service",
+    "Price": 4.99
+  },
+  {
+    "ShortName": "Express",
+    "DeliveryTime": "1-2 Days",
+    "Description": "Fast express delivery",
+    "Price": 9.99
+  },
+  {
+    "ShortName": "Next Day",
+    "DeliveryTime": "1 Day",
+    "Description": "Next day guaranteed delivery",
+    "Price": 14.99
+  }
+]

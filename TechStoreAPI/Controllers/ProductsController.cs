@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TechStoreAPI.Data;
 using TechStoreAPI.DTOs;
@@ -41,6 +42,7 @@ namespace TechStoreAPI.Controllers
             return productselected is null ? NotFound("This Product Does Not Exsist") : Ok(productselected);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateProducts(int id, ProductDto productDto)
         {
@@ -48,6 +50,7 @@ namespace TechStoreAPI.Controllers
             return updateproduct is null ? NotFound("This Product Does Not Exsist") : Ok(updateproduct);
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateNewProduct(ProductCreateDto productDto)
         {
@@ -56,6 +59,7 @@ namespace TechStoreAPI.Controllers
             return CreatedAtAction(nameof(GetProductsById), new { id = newproduct.Id }, newproduct.ToProductDto());
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProducts(int id)
         {
