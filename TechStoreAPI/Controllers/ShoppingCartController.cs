@@ -71,7 +71,8 @@ namespace TechStoreAPI.Controllers
 
             if (string.IsNullOrEmpty(buyerId))
             {
-                return NotFound();
+                Response.Cookies.Delete("buyerId");
+                return NoContent();
             }
 
             var result = await _cartService.DeleteCartAsync(buyerId);

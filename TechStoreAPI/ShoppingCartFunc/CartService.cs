@@ -72,6 +72,15 @@ namespace TechStoreAPI.ShoppingCartFunc
 
                 _dbContext.CartItems.RemoveRange(itemsToRemove);
 
+                if (!cart.Items.Any())
+                {
+                    _dbContext.ShoppingCarts.Remove(existingCart);
+
+                    await _dbContext.SaveChangesAsync();
+
+                    return null;
+                }
+
                 foreach (var item in cart.Items)
                 {
                     var existingItem = existingCart.Items
