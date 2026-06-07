@@ -7,10 +7,15 @@ register and login using JWT authentication, apply discount codes and process pa
 
 ## Stack
 For this API I used: 
--ASP.NET Core Web API 
--Angular 
+
+-ASP.NET Core Web API
+
+-Angular
+
 -SQL Server & Azure SQL 
+
 -Stripe
+
 -Azure App Service
 
 ## Future Improvements
