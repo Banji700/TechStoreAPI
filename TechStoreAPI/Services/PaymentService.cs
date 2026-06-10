@@ -27,8 +27,7 @@ namespace TechStoreAPI.Services
         }
         public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
         {
-            
-
+     
             var cart = await _cartService.GetCartAsync(cartId);
 
             if (cart == null) return null;

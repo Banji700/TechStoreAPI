@@ -54,8 +54,9 @@ namespace TechStoreAPI.Repositories
             }
            if(!string.IsNullOrWhiteSpace(queryObj.Search))
             {
-                query = query.Where(x => x.Name.ToLower().Contains(queryObj.Search) || 
-                x.Brand.ToLower().Contains(queryObj.Search.ToLower()));
+                query = query.Where(x => x.Name.ToLower().Contains(queryObj.Search) ||
+                x.Brand.ToLower().Contains(queryObj.Search.ToLower()) || 
+                x.Category.ToLower().Contains(queryObj.Search.ToLower())); 
             }
            //
            query = queryObj.Sort switch
