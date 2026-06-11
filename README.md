@@ -31,6 +31,8 @@ Link: https://techtronia-ezgkacg5b5bse9cz.westeurope-01.azurewebsites.net
 
 API Base Link: https://techtronia-ezgkacg5b5bse9cz.westeurope-01.azurewebsites.net/api
 
+Frontend Repo Link: https://github.com/Banji700/TechStoreFrontend
+
 Notes: This project uses Stripe test mode for demo purposes so no real payments are processed.
 
 ## Homepage
