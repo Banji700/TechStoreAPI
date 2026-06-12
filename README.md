@@ -20,9 +20,13 @@ For this API I used:
 
 ## Future Improvements
 I am satisfied with the current state of my product but there are always things i feel like i can add and improve on such as:
+
 -Adding notifications to remind you of items in your cart
+
 -Adding more products
+
 -Adding more payment options such as paypal, klarna etc
+
 -improving homepage by adding popular products and most viewed
 
 ## Live Website Link
